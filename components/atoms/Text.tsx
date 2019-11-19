@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Text as TextComponent, StyleSheet} from 'react-native';
+import {textColor} from '../../utils/variables';
 
 interface Props {
   children: string;
@@ -14,8 +15,9 @@ const Text: FC<Props> = ({style, children, ...props}) => (
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'Muli-Black',
-    fontSize: 32,
+    fontFamily: 'Muli-Bold',
+    fontSize: 18,
+    color: textColor,
   },
 });
 
