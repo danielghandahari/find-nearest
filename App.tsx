@@ -32,7 +32,8 @@ const App = () => {
     <>
       <StatusBar barStyle="light-content" />
       <PageView>
-        <Text>hej</Text>
+        <Text>Find nearest</Text>
+        <Text>from</Text>
       </PageView>
       <SafeAreaView></SafeAreaView>
     </>
