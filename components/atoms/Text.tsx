@@ -14,6 +14,7 @@ const Text: FC<Props> = ({style, children, ...props}) => (
 
 const styles = StyleSheet.create({
   text: {
+    fontFamily: 'Muli-Black',
     fontSize: 32,
   },
 });
