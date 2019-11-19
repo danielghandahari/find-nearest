@@ -1,11 +1,15 @@
 import React, {FC} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const PageView: FC = ({children, ...props}) => {
   return (
-    <View style={styles.container} {...props}>
+    <LinearGradient
+      colors={['#FF416C', '#FF4B2B']}
+      style={styles.container}
+      {...props}>
       {children}
-    </View>
+    </LinearGradient>
   );
 };
 
