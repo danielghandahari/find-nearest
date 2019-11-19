@@ -8,75 +8,46 @@
  * @format
  */
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  StatusBar,
-} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, StatusBar} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
+import Picker from './components/atoms/Picker';
+import {IPickerItem} from './components/atoms/Picker';
+
+const pickerItems: IPickerItem[] = [
+  {
+    label: 'subway',
+    value: 'Subway',
+  },
+  {
+    label: 'restaurants',
+    value: 'Restaurants',
+  },
+  {
+    label: 'ammusement parks',
+    value: 'Ammusement parks',
+  },
+];
 
 const App = () => {
+  const [pickerValue, setpickerValue] = useState('ammusement parkshhh');
+
   return (
     <>
       <StatusBar barStyle="light-content" />
       <PageView>
         <Text>Find nearest</Text>
+        <Picker
+          selectedValue={pickerValue}
+          setValue={setpickerValue}
+          pickerItems={pickerItems}
+        />
         <Text>from</Text>
       </PageView>
-      <SafeAreaView></SafeAreaView>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
