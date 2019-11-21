@@ -15,6 +15,8 @@ import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
 import Picker from './components/atoms/Picker';
 import {IPickerItem} from './components/atoms/Picker';
+import LargeText from './components/atoms/LargeText';
+import SearchButton from './components/SearchButton';
 
 const pickerItems: IPickerItem[] = [
   {
@@ -32,19 +34,20 @@ const pickerItems: IPickerItem[] = [
 ];
 
 const App = () => {
-  const [pickerValue, setpickerValue] = useState('ammusement parkshhh');
+  const [pickerValue, setpickerValue] = useState('ammusement parks');
 
   return (
     <>
       <StatusBar barStyle="light-content" />
       <PageView>
-        <Text>Find nearest</Text>
+        <LargeText>Find nearest</LargeText>
         <Picker
           selectedValue={pickerValue}
           setValue={setpickerValue}
           pickerItems={pickerItems}
         />
-        <Text>from</Text>
+        <LargeText>from</LargeText>
+        <SearchButton />
       </PageView>
     </>
   );

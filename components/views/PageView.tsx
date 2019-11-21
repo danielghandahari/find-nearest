@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {firstColor, secondColor} from '../../utils/variables';
 
 interface Props {
   style?: object;
@@ -9,7 +10,7 @@ interface Props {
 const PageView: FC<Props> = ({style, children, ...props}) => {
   return (
     <LinearGradient
-      colors={['#FF416C', '#FF4B2B']}
+      colors={[firstColor, secondColor]}
       style={{...styles.container, ...style}}
       {...props}>
       {children}

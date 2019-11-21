@@ -1,9 +1,5 @@
 import React, {FC} from 'react';
-import {
-  Picker as PickerComponent,
-  StyleSheet,
-  PickerItemProps,
-} from 'react-native';
+import {Picker as PickerComponent, StyleSheet} from 'react-native';
 import {grey} from '../../utils/variables';
 
 export interface IPickerItem {
@@ -33,9 +29,7 @@ const styles = StyleSheet.create({
   picker: {
     height: 120,
     width: 120,
-    borderWidth: 2,
-    borderColor: 'blue',
-    marginBottom: 10,
+    marginBottom: 100,
   },
   pickerItem: {
     fontSize: 18,
