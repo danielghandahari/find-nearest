@@ -13,7 +13,7 @@ interface Props {
   pickerItems: ReadonlyArray<IPickerItem>;
 }
 
-const Picker: FC<Props> = ({setValue, selectedValue, pickerItems}) => (
+const Picker: FC<Props> = ({setValue, selectedValue, pickerItems}: Props) => (
   <PickerComponent
     style={styles.picker}
     selectedValue={selectedValue}

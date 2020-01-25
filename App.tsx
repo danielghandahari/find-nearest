@@ -9,14 +9,15 @@
  */
 
 import React, {useState} from 'react';
-import {SafeAreaView, StatusBar} from 'react-native';
+import {TouchableHighlight, View, StatusBar} from 'react-native';
 
 import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
-import Picker from './components/atoms/Picker';
-import {IPickerItem} from './components/atoms/Picker';
+import Picker, {IPickerItem} from './components/atoms/Picker';
+
 import LargeText from './components/atoms/LargeText';
 import SearchButton from './components/SearchButton';
+import Modal from './components/atoms/Modal';
 
 const pickerItems: IPickerItem[] = [
   {
@@ -35,6 +36,7 @@ const pickerItems: IPickerItem[] = [
 
 const App = () => {
   const [pickerValue, setpickerValue] = useState('ammusement parks');
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <>
@@ -48,6 +50,16 @@ const App = () => {
         />
         <LargeText>from</LargeText>
         <SearchButton />
+
+        <TouchableHighlight onPress={() => setModalOpen(true)}>
+          <Text>OPEN</Text>
+        </TouchableHighlight>
+
+        <Modal visible={modalOpen} onClose={() => setModalOpen(false)}>
+          <View>
+            <Text>TJAA</Text>
+          </View>
+        </Modal>
       </PageView>
     </>
   );

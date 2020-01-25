@@ -7,10 +7,8 @@ interface Props {
   style?: object;
 }
 
-const Text: FC<Props> = ({style, children, ...props}) => (
-  <TextComponent style={{...styles.text, ...style}} {...props}>
-    {children}
-  </TextComponent>
+const Text: FC<Props> = ({style, children}: Props) => (
+  <TextComponent style={{...styles.text, ...style}}>{children}</TextComponent>
 );
 
 const styles = StyleSheet.create({
