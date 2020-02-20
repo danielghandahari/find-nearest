@@ -18,6 +18,7 @@ import {
 // import Geocoder from 'react-native-geocoding';
 import Geocoder from 'react-native-geocoding';
 
+import FixedBottomButton from './components/atoms/FixedBottomButton';
 import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
 import Picker, {IPickerItem} from './components/atoms/Picker';
@@ -48,7 +49,6 @@ const pickerItems: IPickerItem[] = [
 ];
 
 const App = () => {
-  const [pickerValue, setpickerValue] = useState('ammusement parks');
   const [modalOpen, setModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
 
@@ -63,11 +63,9 @@ const App = () => {
     Geocoder.from('Pingstvägen 4')
       .then((json: {results: {geometry: {location: any}}[]}) => {
         const {location} = json.results[0].geometry;
-        console.log('TJAA', location);
         return location;
       })
       .then(async (coordinates: any) => {
-        console.log({HERE: coordinates});
         const res = await fetch(query, {
           method: 'POST',
           headers: {
@@ -82,7 +80,7 @@ const App = () => {
             },
           }),
         });
-        console.log('hejsan', res);
+
         let resJson;
         if (res.status === 200) {
           resJson = await res.json();
@@ -112,13 +110,7 @@ const App = () => {
     <>
       <StatusBar barStyle="light-content" />
       <PageView>
-        <LargeText>Find nearest</LargeText>
-        <Picker
-          selectedValue={pickerValue}
-          setValue={setpickerValue}
-          pickerItems={pickerItems}
-        />
-        <LargeText>from</LargeText>
+        <LargeText>Find nearest subways from</LargeText>
         <SearchButton
           text={currentAddress}
           onPress={() => setModalOpen(true)}
@@ -130,12 +122,11 @@ const App = () => {
           setCurrentAddress={setCurrentAddress}
         />
 
-        <TouchableOpacity onPress={onGo}>
-          <Text>SEARCH</Text>
-        </TouchableOpacity>
-
         {subways ? subways.map(s => <Text>{s.name}</Text>) : null}
       </PageView>
+      {currentAddress !== '' && (
+        <FixedBottomButton text="SEARCH" onPress={onGo} />
+      )}
     </>
   );
 };

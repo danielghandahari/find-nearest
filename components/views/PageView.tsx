@@ -11,7 +11,8 @@ interface Props {
 const PageView: FC<Props> = ({style, children}: Props) => {
   return (
     <LinearGradient
-      colors={[firstColor, secondColor]}
+      // colors={[firstColor, secondColor]}
+      colors={['black', 'black']}
       style={{...styles.container, ...style}}>
       {children}
     </LinearGradient>
