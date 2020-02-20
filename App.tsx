@@ -9,7 +9,14 @@
  */
 
 import React, {useState} from 'react';
-import {TouchableHighlight, View, StatusBar} from 'react-native';
+import {
+  TouchableHighlight,
+  View,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+// import Geocoder from 'react-native-geocoding';
+import Geocoder from 'react-native-geocoding';
 
 import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
@@ -20,6 +27,10 @@ import SearchButton from './components/SearchButton';
 import Modal from './components/atoms/Modal';
 import GooglePlacesInput from './components/GooglePlacesInput';
 import SearchModal from './components/SearchModal';
+
+Geocoder.init('AIzaSyCf7Y8tZY3PTvER1A5VhEM_JnHW-_OKNlc');
+
+const query = 'https://findingmetro.com/.netlify/functions/server/place';
 
 const pickerItems: IPickerItem[] = [
   {
@@ -41,6 +52,62 @@ const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
 
+  const [noSubwaysText, setNoSubwaysText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [subways, setSubways] = useState<any[]>([]);
+
+  const onGo = async () => {
+    setIsLoading(true);
+    if (noSubwaysText.length) setNoSubwaysText('');
+    setSubways([]);
+    Geocoder.from('Pingstvägen 4')
+      .then((json: {results: {geometry: {location: any}}[]}) => {
+        const {location} = json.results[0].geometry;
+        console.log('TJAA', location);
+        return location;
+      })
+      .then(async (coordinates: any) => {
+        console.log({HERE: coordinates});
+        const res = await fetch(query, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            address: currentAddress,
+            coordinates: {
+              lat: coordinates.lat,
+              lng: coordinates.lng,
+            },
+          }),
+        });
+        console.log('hejsan', res);
+        let resJson;
+        if (res.status === 200) {
+          resJson = await res.json();
+        } else if (res.status === 404) {
+          setNoSubwaysText('There are no subways near the given address!');
+        } else {
+          setNoSubwaysText('Failed finding subways near the given address.');
+        }
+
+        if (resJson)
+          setSubways(
+            resJson.sort(
+              (a: {distanceValue: number}, b: {distanceValue: number}) =>
+                a.distanceValue - b.distanceValue,
+            ),
+          );
+        setIsLoading(false);
+      })
+      .catch((error: any) => {
+        setNoSubwaysText('Failed finding subways near the given address.');
+        console.error('Error: ', error);
+        setIsLoading(false);
+      });
+  };
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -57,17 +124,17 @@ const App = () => {
           onPress={() => setModalOpen(true)}
         />
 
-        {/* <Modal visible={modalOpen} onClose={() => setModalOpen(false)}>
-          <View>
-            <Text>TJAA</Text>
-          </View>
-        </Modal> */}
-
         <SearchModal
           visible={modalOpen}
           onClose={() => setModalOpen(false)}
           setCurrentAddress={setCurrentAddress}
         />
+
+        <TouchableOpacity onPress={onGo}>
+          <Text>SEARCH</Text>
+        </TouchableOpacity>
+
+        {subways ? subways.map(s => <Text>{s.name}</Text>) : null}
       </PageView>
     </>
   );
