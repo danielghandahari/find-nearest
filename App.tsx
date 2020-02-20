@@ -18,6 +18,8 @@ import Picker, {IPickerItem} from './components/atoms/Picker';
 import LargeText from './components/atoms/LargeText';
 import SearchButton from './components/SearchButton';
 import Modal from './components/atoms/Modal';
+import GooglePlacesInput from './components/GooglePlacesInput';
+import SearchModal from './components/SearchModal';
 
 const pickerItems: IPickerItem[] = [
   {
@@ -37,6 +39,7 @@ const pickerItems: IPickerItem[] = [
 const App = () => {
   const [pickerValue, setpickerValue] = useState('ammusement parks');
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState('');
 
   return (
     <>
@@ -49,17 +52,22 @@ const App = () => {
           pickerItems={pickerItems}
         />
         <LargeText>from</LargeText>
-        <SearchButton />
+        <SearchButton
+          text={currentAddress}
+          onPress={() => setModalOpen(true)}
+        />
 
-        <TouchableHighlight onPress={() => setModalOpen(true)}>
-          <Text>OPEN</Text>
-        </TouchableHighlight>
-
-        <Modal visible={modalOpen} onClose={() => setModalOpen(false)}>
+        {/* <Modal visible={modalOpen} onClose={() => setModalOpen(false)}>
           <View>
             <Text>TJAA</Text>
           </View>
-        </Modal>
+        </Modal> */}
+
+        <SearchModal
+          visible={modalOpen}
+          onClose={() => setModalOpen(false)}
+          setCurrentAddress={setCurrentAddress}
+        />
       </PageView>
     </>
   );

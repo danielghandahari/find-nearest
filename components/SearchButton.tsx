@@ -3,14 +3,16 @@ import {TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 
 import Text from './atoms/Text';
 import {shadow, grey, firstColor} from '../utils/variables';
+import {trim} from '../utils/functions';
 
-interface Props {}
+interface IProps {
+  text: string;
+  onPress: () => void;
+}
 
-const SearchButton: FC<Props> = () => (
-  <TouchableOpacity activeOpacity={1} style={styles.button}>
-    <Text style={styles.text}>
-      <Text style={styles.search}>s</Text>Place, adress ...
-    </Text>
+const SearchButton: FC<IProps> = ({text, onPress}: IProps) => (
+  <TouchableOpacity activeOpacity={1} style={styles.button} onPress={onPress}>
+    <Text style={styles.text}>{trim(text).formattedStr}</Text>
   </TouchableOpacity>
 );
 
@@ -25,10 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    color: firstColor,
-  },
-  search: {
-    paddingRight: 100,
     color: firstColor,
   },
 });
