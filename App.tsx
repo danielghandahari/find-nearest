@@ -88,9 +88,11 @@ const App = () => {
         if (res.status === 200) {
           resJson = await res.json();
         } else if (res.status === 404) {
-          setNoSubwaysText('There are no subways near the given address!');
+          setNoSubwaysText(
+            'There are unfortunately no subways near the given address 😢',
+          );
         } else {
-          setNoSubwaysText('Failed finding subways near the given address.');
+          setNoSubwaysText('Failed finding subways near the given address 🧐');
         }
 
         if (resJson)

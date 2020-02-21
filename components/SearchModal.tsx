@@ -13,7 +13,11 @@ const SearchModal: FC<IProps> = ({
   onClose,
   setCurrentAddress,
 }: IProps) => (
-  <Modal onClose={onClose} visible={visible} usePageView={false}>
+  <Modal
+    onClose={onClose}
+    visible={visible}
+    usePageView={false}
+    showCancelButton={false}>
     <GooglePlacesInput
       onClose={onClose}
       setCurrentAddress={setCurrentAddress}

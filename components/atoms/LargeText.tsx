@@ -6,16 +6,18 @@ import {textColor} from '../../utils/variables';
 
 interface IProps {
   children: string;
+  style?: object;
 }
 
-const LargeText: FC<IProps> = ({children}: IProps) => (
-  <Text style={styles.text}>{children}</Text>
+const LargeText: FC<IProps> = ({children, style}: IProps) => (
+  <Text style={{...styles.text, ...style}}>{children}</Text>
 );
 
 const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     color: textColor,
+    fontWeight: '800',
   },
 });
 
