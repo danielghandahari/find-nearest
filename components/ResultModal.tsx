@@ -6,6 +6,7 @@ import Modal from './atoms/Modal';
 import Text from './atoms/Text';
 import {Result} from '../custom-types';
 import LargeText from './atoms/LargeText';
+import {trim} from '../utils/functions';
 
 interface IProps {
   visible: boolean;
@@ -32,9 +33,9 @@ const ResultModal: FC<IProps> = ({visible, onClose, result}: IProps) => {
         const isFirstStyle = isFirst ? {color: thirdColor} : {};
 
         return (
-          <Text
-            style={{...styles.result, ...isFirstStyle}}
-            key={s.name}>{`${s.name}: ${s.distanceTextRepr}`}</Text>
+          <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>{`${
+            trim(s.name, 15).formattedStr
+          }: ${s.distanceTextRepr}`}</Text>
         );
       })}
     </ScrollView>
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   result: {
     fontSize: 16,
-    paddingTop: 2.5,
+    paddingTop: 5,
   },
 });
 

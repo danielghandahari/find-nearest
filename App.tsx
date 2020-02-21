@@ -9,45 +9,22 @@
  */
 
 import React, {useState} from 'react';
-import {
-  TouchableHighlight,
-  View,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
-// import Geocoder from 'react-native-geocoding';
+import {StatusBar, View, StyleSheet} from 'react-native';
 import Geocoder from 'react-native-geocoding';
 
+import Logo from './components/Logo';
 import ResultModal from './components/ResultModal';
 import FixedBottomButton from './components/atoms/FixedBottomButton';
 import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
-import Picker, {IPickerItem} from './components/atoms/Picker';
 
 import LargeText from './components/atoms/LargeText';
 import SearchButton from './components/SearchButton';
-import Modal from './components/atoms/Modal';
-import GooglePlacesInput from './components/GooglePlacesInput';
 import SearchModal from './components/SearchModal';
 
 Geocoder.init('AIzaSyCf7Y8tZY3PTvER1A5VhEM_JnHW-_OKNlc');
 
 const query = 'https://findingmetro.com/.netlify/functions/server/place';
-
-const pickerItems: IPickerItem[] = [
-  {
-    label: 'subway',
-    value: 'Subway',
-  },
-  {
-    label: 'restaurants',
-    value: 'Restaurants',
-  },
-  {
-    label: 'ammusement parks',
-    value: 'Ammusement parks',
-  },
-];
 
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -115,12 +92,19 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <PageView>
-        <LargeText>Find nearest subways from</LargeText>
-        <SearchButton
-          text={currentAddress}
-          onPress={() => setModalOpen(true)}
-        />
+      <PageView style={styles.pageView}>
+        <View>
+          <Logo />
+        </View>
+        <View>
+          <LargeText style={styles.findSubwaysText}>
+            Find nearest subways from
+          </LargeText>
+          <SearchButton
+            text={currentAddress}
+            onPress={() => setModalOpen(true)}
+          />
+        </View>
 
         <SearchModal
           visible={modalOpen}
@@ -145,5 +129,12 @@ const App = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  pageView: {justifyContent: 'space-around'},
+  findSubwaysText: {
+    fontSize: 31,
+  },
+});
 
 export default App;
