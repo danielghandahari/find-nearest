@@ -1,17 +1,10 @@
 import React, {FC} from 'react';
 import {Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import Geocoder from 'react-native-geocoding';
+import {thirdColor, textColor, secondColor} from '../utils/variables';
 
 navigator.geolocation = require('@react-native-community/geolocation');
-
-const homePlace = {
-  description: 'Home',
-  geometry: {location: {lat: 48.8152937, lng: 2.4597668}},
-};
-const workPlace = {
-  description: 'Work',
-  geometry: {location: {lat: 48.8496818, lng: 2.2940881}},
-};
 
 interface IProps {
   onClose: () => void;
@@ -34,8 +27,22 @@ const GooglePlacesInput: FC<IProps> = ({
       renderDescription={(row: any) => row.description} // custom description render
       onPress={(data: any, details = null) => {
         // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-        setCurrentAddress(data.description);
+        console.log({data, details});
+        if (
+          typeof data.description === 'string' &&
+          data.description === 'Current location'
+        ) {
+          const {lat, lng} = data.geometry.location;
+
+          Geocoder.from(lat, lng)
+            .then((json: {results: {formatted_address: any}[]}) => {
+              const address = json.results[0].formatted_address;
+              setCurrentAddress(address);
+            })
+            .catch((error: any) => console.warn(error));
+        } else {
+          setCurrentAddress(data.description);
+        }
         onClose();
       }}
       getDefaultValue={() => ''}
@@ -48,18 +55,27 @@ const GooglePlacesInput: FC<IProps> = ({
       styles={{
         textInputContainer: {
           width: '100%',
-          marginTop: 100,
+          marginTop: 75,
+          backgroundColor: secondColor,
+          // borderColor: 'red',
+          // borderWidth: 2,
+          borderTopWidth: 0,
+          borderBottomWidth: 0,
         },
         description: {
           fontWeight: 'bold',
+          color: textColor,
         },
         predefinedPlacesDescription: {
-          color: '#1faadb',
+          color: thirdColor,
+        },
+        poweredContainer: {
+          display: 'none',
         },
       }}
       currentLocation // Will add a 'Current location' button at the top of the predefined places list
       currentLocationLabel="Current location"
-      nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+      nearbyPlacesAPI="None" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       GoogleReverseGeocodingQuery={
         {
           // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
@@ -78,7 +94,6 @@ const GooglePlacesInput: FC<IProps> = ({
         'locality',
         'administrative_area_level_3',
       ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-      predefinedPlaces={[homePlace, workPlace]}
       debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
       // renderLeftButton={() => (
       //   // <Image source={require('path/custom/left-icon')} />
@@ -86,7 +101,7 @@ const GooglePlacesInput: FC<IProps> = ({
       // )}
       renderRightButton={() => (
         <TouchableOpacity style={styles.rightButton} onPress={onClose}>
-          <Text>Cancel</Text>
+          <Text style={styles.rightButtonText}>Cancel</Text>
         </TouchableOpacity>
       )}
     />
@@ -98,6 +113,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
+  },
+  rightButtonText: {
+    fontWeight: '700',
+    color: textColor,
   },
 });
 
