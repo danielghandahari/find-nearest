@@ -18,6 +18,7 @@ import {
 // import Geocoder from 'react-native-geocoding';
 import Geocoder from 'react-native-geocoding';
 
+import ResultModal from './components/ResultModal';
 import FixedBottomButton from './components/atoms/FixedBottomButton';
 import PageView from './components/views/PageView';
 import Text from './components/atoms/Text';
@@ -51,6 +52,7 @@ const pickerItems: IPickerItem[] = [
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
+  const [resultModalOpen, setResultModalOpen] = useState(false);
 
   const [noSubwaysText, setNoSubwaysText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +62,8 @@ const App = () => {
     setIsLoading(true);
     if (noSubwaysText.length) setNoSubwaysText('');
     setSubways([]);
-    Geocoder.from('Pingstvägen 4')
+
+    Geocoder.from(currentAddress)
       .then((json: {results: {geometry: {location: any}}[]}) => {
         const {location} = json.results[0].geometry;
         return location;
@@ -98,6 +101,7 @@ const App = () => {
             ),
           );
         setIsLoading(false);
+        setResultModalOpen(true);
       })
       .catch((error: any) => {
         setNoSubwaysText('Failed finding subways near the given address.');
@@ -122,7 +126,16 @@ const App = () => {
           setCurrentAddress={setCurrentAddress}
         />
 
-        {subways ? subways.map(s => <Text>{s.name}</Text>) : null}
+        <ResultModal
+          visible={resultModalOpen}
+          onClose={() => setResultModalOpen(false)}
+          result={{
+            data: subways,
+            errorMsg: noSubwaysText,
+          }}
+        />
+
+        {isLoading && <Text>Loading...</Text>}
       </PageView>
       {currentAddress !== '' && (
         <FixedBottomButton text="SEARCH" onPress={onGo} />
