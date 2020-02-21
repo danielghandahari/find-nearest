@@ -1,6 +1,12 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, {FC} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import {thirdColor} from '../utils/variables';
 import Modal from './atoms/Modal';
 import Text from './atoms/Text';
@@ -32,10 +38,20 @@ const ResultModal: FC<IProps> = ({visible, onClose, result}: IProps) => {
         const isFirst = i === 0;
         const isFirstStyle = isFirst ? {color: thirdColor} : {};
 
+        const gMapsNameUri = s.name.replace(' ', '+');
+
         return (
-          <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>{`${
-            trim(s.name, 15).formattedStr
-          }: ${s.distanceTextRepr}`}</Text>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() =>
+              Linking.openURL(
+                `https://www.google.com/maps/search/?api=1&query=${gMapsNameUri}`,
+              )
+            }>
+            <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>{`${
+              trim(s.name, 15).formattedStr
+            }: ${s.distanceTextRepr}`}</Text>
+          </TouchableOpacity>
         );
       })}
     </ScrollView>

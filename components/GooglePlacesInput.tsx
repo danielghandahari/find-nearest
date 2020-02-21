@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geocoder from 'react-native-geocoding';
 import {thirdColor, textColor, secondColor} from '../utils/variables';
