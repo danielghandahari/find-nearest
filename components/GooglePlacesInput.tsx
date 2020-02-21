@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Image, Text, TouchableOpacity} from 'react-native';
+import {Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 navigator.geolocation = require('@react-native-community/geolocation');
@@ -68,7 +68,7 @@ const GooglePlacesInput: FC<IProps> = ({
       GooglePlacesSearchQuery={{
         // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
         rankby: 'distance',
-        type: 'cafe',
+        // type: 'cafe',
       }}
       GooglePlacesDetailsQuery={{
         // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
@@ -85,12 +85,20 @@ const GooglePlacesInput: FC<IProps> = ({
       //   <Text>SomeFakeIcon</Text>
       // )}
       renderRightButton={() => (
-        <TouchableOpacity onPress={onClose}>
+        <TouchableOpacity style={styles.rightButton} onPress={onClose}>
           <Text>Cancel</Text>
         </TouchableOpacity>
       )}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  rightButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+});
 
 export default GooglePlacesInput;
