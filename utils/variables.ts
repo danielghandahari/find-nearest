@@ -1,15 +1,6 @@
-export const firstColor: string = '#FF416C';
-export const secondColor: string = '#FF4B2B';
-export const textColor: string = '#FAFAFA';
-export const grey: string = '#E7E7E7';
+export const grey: string = '#6F6F6F';
 
-export const shadow = {
-  shadowColor: '#000',
-  shadowOffset: {
-    width: 1,
-    height: 7,
-  },
-  shadowOpacity: 0.17,
-  shadowRadius: 4.65,
-  elevation: 6,
-};
+export const textColor: string = '#BFB6A8';
+export const firstColor = '#21242B';
+export const secondColor = '#2C2F38';
+export const thirdColor = '#FF8008';

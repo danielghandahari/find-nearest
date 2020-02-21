@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import Text from './Text';
+import {secondColor, thirdColor} from '../../utils/variables';
 
 interface IProps {
   onPress: () => void;
@@ -9,7 +10,7 @@ interface IProps {
 
 const FixedBottomButton = ({onPress, text}: IProps) => (
   <TouchableOpacity style={styles.container} onPress={onPress}>
-    <Text>{text}</Text>
+    <Text style={styles.text}>{text}</Text>
   </TouchableOpacity>
 );
 
@@ -17,9 +18,14 @@ const styles = StyleSheet.create({
   container: {
     height: 100,
     width: '100%',
-    backgroundColor: 'black',
+    backgroundColor: secondColor,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    color: thirdColor,
+    fontWeight: '900',
+    fontSize: 25,
   },
 });
 
