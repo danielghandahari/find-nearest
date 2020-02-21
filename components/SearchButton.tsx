@@ -13,7 +13,7 @@ interface IProps {
 const SearchButton: FC<IProps> = ({text, onPress}: IProps) => (
   <View style={styles.container}>
     <TouchableOpacity activeOpacity={1} style={styles.button} onPress={onPress}>
-      {true ? (
+      {text === '' ? (
         <Text style={styles.placeholder} numberOfLines={1}>
           Place, address, location ...
         </Text>
