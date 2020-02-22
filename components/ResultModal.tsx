@@ -13,10 +13,17 @@ interface IProps {
   visible: boolean;
   onClose: () => void;
   result: Result;
+  currentAddress: string;
 }
 
-const ResultModal: FC<IProps> = ({visible, onClose, result}: IProps) => {
+const ResultModal: FC<IProps> = ({
+  visible,
+  onClose,
+  result,
+  currentAddress,
+}: IProps) => {
   const {data, errorMsg} = result;
+  const resultTitle = `Here are the subways closest to ${currentAddress} 🚂🤩`;
 
   const renderErrorMsg = () => (
     <View style={styles.errorContainer}>
@@ -26,9 +33,7 @@ const ResultModal: FC<IProps> = ({visible, onClose, result}: IProps) => {
 
   const renderResult = () => (
     <View style={styles.resultContainer}>
-      <LargeText style={styles.resultTitle}>
-        Here are the nearest subways 🚂🤩
-      </LargeText>
+      <LargeText style={styles.resultTitle}>{resultTitle}</LargeText>
       {data.map((s: any, i: number) => {
         const isFirst = i === 0;
         const isLast = i === data.length - 1;

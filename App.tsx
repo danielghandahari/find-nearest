@@ -130,6 +130,7 @@ const App = () => {
             data: subways,
             errorMsg: noSubwaysText,
           }}
+          currentAddress={currentAddress}
         />
 
         {isLoading && <ActivityIndicator size="large" color={thirdColor} />}
