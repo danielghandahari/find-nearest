@@ -9,14 +9,14 @@
  */
 
 import React, {useState} from 'react';
-import {StatusBar, View, StyleSheet} from 'react-native';
+import {StatusBar, View, StyleSheet, ActivityIndicator} from 'react-native';
 import Geocoder from 'react-native-geocoding';
 
+import {thirdColor} from './utils/variables';
 import Logo from './components/Logo';
 import ResultModal from './components/ResultModal';
 import FixedBottomButton from './components/atoms/FixedBottomButton';
 import PageView from './components/views/PageView';
-import Text from './components/atoms/Text';
 
 import LargeText from './components/atoms/LargeText';
 import SearchButton from './components/SearchButton';
@@ -93,7 +93,7 @@ const App = () => {
         setResultModalOpen(true);
       })
       .catch((error: any) => {
-        setNoSubwaysText('Failed finding subways near the given address.');
+        setNoSubwaysText('Failed finding subways near the given address 🧐');
         console.error('Error: ', error);
         setIsLoading(false);
       });
@@ -132,7 +132,7 @@ const App = () => {
           }}
         />
 
-        {isLoading && <Text>Loading...</Text>}
+        {isLoading && <ActivityIndicator size="large" color={thirdColor} />}
       </PageView>
       {currentAddress !== '' && !isLoading && (
         <FixedBottomButton text="SEARCH" onPress={onGo} />

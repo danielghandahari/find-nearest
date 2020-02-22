@@ -1,12 +1,7 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, {FC} from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Linking} from 'react-native';
 import {thirdColor} from '../utils/variables';
 import Modal from './atoms/Modal';
 import Text from './atoms/Text';
@@ -30,35 +25,40 @@ const ResultModal: FC<IProps> = ({visible, onClose, result}: IProps) => {
   );
 
   const renderResult = () => (
-    <ScrollView style={styles.resultContainer}>
+    <View style={styles.resultContainer}>
       <LargeText style={styles.resultTitle}>
         Here are the nearest subways 🚂🤩
       </LargeText>
       {data.map((s: any, i: number) => {
         const isFirst = i === 0;
+        const isLast = i === data.length - 1;
         const isFirstStyle = isFirst ? {color: thirdColor} : {};
+        const isLastStyle = isLast ? {marginBottom: 30} : {};
 
         const gMapsNameUri = s.name.replace(' ', '+');
 
         return (
           <TouchableOpacity
+            key={i}
             activeOpacity={1}
             onPress={() =>
               Linking.openURL(
                 `https://www.google.com/maps/search/?api=1&query=${gMapsNameUri}`,
               )
             }>
-            <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>{`${
-              trim(s.name, 15).formattedStr
-            }: ${s.distanceTextRepr}`}</Text>
+            <Text
+              style={{...styles.result, ...isFirstStyle, ...isLastStyle}}
+              key={s.name}>{`${trim(s.name, 15).formattedStr}: ${
+              s.distanceTextRepr
+            }`}</Text>
           </TouchableOpacity>
         );
       })}
-    </ScrollView>
+    </View>
   );
 
   return (
-    <Modal onClose={onClose} visible={visible}>
+    <Modal onClose={onClose} visible={visible} useScrollView>
       <View style={styles.container}>
         {errorMsg === '' && data ? (
           <>{renderResult()}</>

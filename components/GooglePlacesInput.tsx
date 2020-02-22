@@ -47,9 +47,7 @@ const GooglePlacesInput: FC<IProps> = ({
       renderDescription={(row: any) => row.description} // custom description render
       onPress={async (data: any, details = null) => {
         // 'details' is provided when fetchDetails = true
-        console.log({data, details});
 
-        let newAddress = '';
         if (
           typeof data.description === 'string' &&
           data.description === 'Current location'
@@ -59,22 +57,21 @@ const GooglePlacesInput: FC<IProps> = ({
           Geocoder.from(lat, lng)
             .then((json: {results: {formatted_address: any}[]}) => {
               const address = json.results[0].formatted_address;
-              newAddress = address;
-              setCurrentAddress(newAddress);
+              setCurrentAddress(address);
+              onSearch(address);
             })
             .catch((error: any) => console.warn(error));
         } else {
-          newAddress = data.description;
-          setCurrentAddress(newAddress);
+          setCurrentAddress(data.description);
 
           // Set new recent searches
           const MAX_SEARCHES = 10;
           const searchExists = recentSearches.some(
-            s => s.description === newAddress,
+            s => s.description === data.description,
           );
 
           if (!searchExists) {
-            const newSearch: PlaceSearch = {description: newAddress};
+            const newSearch: PlaceSearch = {description: data.description};
             const newRecentSearches = [newSearch, ...recentSearches].slice(
               0,
               MAX_SEARCHES,
@@ -83,9 +80,9 @@ const GooglePlacesInput: FC<IProps> = ({
             setRecentSearches(newRecentSearches);
             await setAsyncStorage('recent-searches', newRecentSearches);
           }
+          onSearch(data.description);
         }
 
-        onSearch(newAddress);
         onClose();
       }}
       getDefaultValue={() => ''}

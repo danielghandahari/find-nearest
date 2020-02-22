@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
+  ScrollView,
 } from 'react-native';
 import {firstColor} from '../../utils/variables';
 import PageView from '../views/PageView';
@@ -14,6 +15,7 @@ interface Props {
   onClose: () => void;
   children: Element | Element[] | JSX.Element;
   usePageView?: boolean;
+  useScrollView?: boolean;
   showCancelButton?: boolean;
 }
 
@@ -22,9 +24,11 @@ const Modal: FC<Props> = ({
   onClose,
   children,
   usePageView = true,
+  useScrollView = false,
   showCancelButton = true,
 }: Props) => {
   const PageElement = usePageView ? PageView : Fragment;
+  const ScrollElement = useScrollView ? ScrollView : View;
 
   const renderCancelButton = () => (
     <>
@@ -46,7 +50,9 @@ const Modal: FC<Props> = ({
       onRequestClose={onClose}>
       <View style={styles.container}>
         {renderCancelButton()}
-        <PageElement>{children}</PageElement>
+        <ScrollElement style={{flex: 1}}>
+          <PageElement>{children}</PageElement>
+        </ScrollElement>
       </View>
     </ModalComponent>
   );
@@ -56,7 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: firstColor,
-    position: 'relative',
   },
   cancelButton: {
     marginTop: 50,
