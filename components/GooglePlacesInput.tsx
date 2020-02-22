@@ -10,6 +10,7 @@ navigator.geolocation = require('@react-native-community/geolocation');
 interface IProps {
   onClose: () => void;
   setCurrentAddress: React.Dispatch<React.SetStateAction<string>>;
+  onSearch: (arg: any) => void;
 }
 
 type PlaceSearch = {description: string};
@@ -17,6 +18,7 @@ type PlaceSearch = {description: string};
 const GooglePlacesInput: FC<IProps> = ({
   onClose,
   setCurrentAddress,
+  onSearch,
 }: IProps) => {
   const [recentSearches, setRecentSearches] = useState<PlaceSearch[]>([]);
 
@@ -46,6 +48,8 @@ const GooglePlacesInput: FC<IProps> = ({
       onPress={async (data: any, details = null) => {
         // 'details' is provided when fetchDetails = true
         console.log({data, details});
+
+        let newAddress = '';
         if (
           typeof data.description === 'string' &&
           data.description === 'Current location'
@@ -55,24 +59,33 @@ const GooglePlacesInput: FC<IProps> = ({
           Geocoder.from(lat, lng)
             .then((json: {results: {formatted_address: any}[]}) => {
               const address = json.results[0].formatted_address;
-              setCurrentAddress(address);
+              newAddress = address;
+              setCurrentAddress(newAddress);
             })
             .catch((error: any) => console.warn(error));
         } else {
-          setCurrentAddress(data.description);
+          newAddress = data.description;
+          setCurrentAddress(newAddress);
 
           // Set new recent searches
           const MAX_SEARCHES = 10;
-          const newSearch: PlaceSearch = {description: data.description};
-
-          const newRecentSearches = [newSearch, ...recentSearches].slice(
-            0,
-            MAX_SEARCHES,
+          const searchExists = recentSearches.some(
+            s => s.description === newAddress,
           );
 
-          setRecentSearches(newRecentSearches);
-          await setAsyncStorage('recent-searches', newRecentSearches);
+          if (!searchExists) {
+            const newSearch: PlaceSearch = {description: newAddress};
+            const newRecentSearches = [newSearch, ...recentSearches].slice(
+              0,
+              MAX_SEARCHES,
+            );
+
+            setRecentSearches(newRecentSearches);
+            await setAsyncStorage('recent-searches', newRecentSearches);
+          }
         }
+
+        onSearch(newAddress);
         onClose();
       }}
       getDefaultValue={() => ''}

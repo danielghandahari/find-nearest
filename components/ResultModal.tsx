@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   result: {
     fontSize: 16,
-    paddingTop: 5,
+    paddingTop: 7.5,
   },
 });
 

@@ -6,12 +6,14 @@ interface IProps {
   visible: boolean;
   onClose: () => void;
   setCurrentAddress: React.Dispatch<React.SetStateAction<string>>;
+  onSearch: (arg: any) => void;
 }
 
 const SearchModal: FC<IProps> = ({
   visible,
   onClose,
   setCurrentAddress,
+  onSearch,
 }: IProps) => (
   <Modal
     onClose={onClose}
@@ -21,6 +23,7 @@ const SearchModal: FC<IProps> = ({
     <GooglePlacesInput
       onClose={onClose}
       setCurrentAddress={setCurrentAddress}
+      onSearch={onSearch}
     />
   </Modal>
 );

@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {StatusBar, View, StyleSheet} from 'react-native';
 import Geocoder from 'react-native-geocoding';
 
@@ -21,7 +21,6 @@ import Text from './components/atoms/Text';
 import LargeText from './components/atoms/LargeText';
 import SearchButton from './components/SearchButton';
 import SearchModal from './components/SearchModal';
-import {setAsyncStorage, getAsyncStorage} from './utils/async-storage';
 
 Geocoder.init('AIzaSyCf7Y8tZY3PTvER1A5VhEM_JnHW-_OKNlc');
 
@@ -36,12 +35,22 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [subways, setSubways] = useState<any[]>([]);
 
-  const onGo = async () => {
+  const onGo = async (address?: string) => {
+    /**
+     * Sometimes the address state value is
+     * used and sometimes its given as an input.
+     * Checking type of address because of weird
+     * default argument that is of type Class.
+     */
+    let usedAddress = '';
+    if (typeof address === 'string' && address !== '') usedAddress = address;
+    else usedAddress = currentAddress;
+
     setIsLoading(true);
     if (noSubwaysText.length) setNoSubwaysText('');
     setSubways([]);
 
-    Geocoder.from(currentAddress)
+    Geocoder.from(usedAddress)
       .then((json: {results: {geometry: {location: any}}[]}) => {
         const {location} = json.results[0].geometry;
         return location;
@@ -54,7 +63,7 @@ const App = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            address: currentAddress,
+            address: usedAddress,
             coordinates: {
               lat: coordinates.lat,
               lng: coordinates.lng,
@@ -111,6 +120,7 @@ const App = () => {
           visible={modalOpen}
           onClose={() => setModalOpen(false)}
           setCurrentAddress={setCurrentAddress}
+          onSearch={onGo}
         />
 
         <ResultModal
@@ -124,7 +134,7 @@ const App = () => {
 
         {isLoading && <Text>Loading...</Text>}
       </PageView>
-      {currentAddress !== '' && (
+      {currentAddress !== '' && !isLoading && (
         <FixedBottomButton text="SEARCH" onPress={onGo} />
       )}
     </>
