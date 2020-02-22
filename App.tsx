@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StatusBar, View, StyleSheet} from 'react-native';
 import Geocoder from 'react-native-geocoding';
 
@@ -21,6 +21,7 @@ import Text from './components/atoms/Text';
 import LargeText from './components/atoms/LargeText';
 import SearchButton from './components/SearchButton';
 import SearchModal from './components/SearchModal';
+import {setAsyncStorage, getAsyncStorage} from './utils/async-storage';
 
 Geocoder.init('AIzaSyCf7Y8tZY3PTvER1A5VhEM_JnHW-_OKNlc');
 

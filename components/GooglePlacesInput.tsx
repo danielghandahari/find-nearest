@@ -1,8 +1,9 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geocoder from 'react-native-geocoding';
 import {thirdColor, textColor, secondColor} from '../utils/variables';
+import {setAsyncStorage, getAsyncStorage} from '../utils/async-storage';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -11,10 +12,27 @@ interface IProps {
   setCurrentAddress: React.Dispatch<React.SetStateAction<string>>;
 }
 
+type PlaceSearch = {description: string};
+
 const GooglePlacesInput: FC<IProps> = ({
   onClose,
   setCurrentAddress,
 }: IProps) => {
+  const [recentSearches, setRecentSearches] = useState<PlaceSearch[]>([]);
+
+  useEffect(() => {
+    async function getRecentSearches() {
+      const currentRecentSearches: PlaceSearch[] = await getAsyncStorage(
+        'recent-searches',
+      );
+      if (currentRecentSearches && currentRecentSearches.length) {
+        setRecentSearches(currentRecentSearches);
+      }
+    }
+
+    getRecentSearches();
+  }, []);
+
   return (
     <GooglePlacesAutocomplete
       placeholder="Search"
@@ -25,7 +43,7 @@ const GooglePlacesInput: FC<IProps> = ({
       listViewDisplayed="auto" // true/false/undefined
       fetchDetails
       renderDescription={(row: any) => row.description} // custom description render
-      onPress={(data: any, details = null) => {
+      onPress={async (data: any, details = null) => {
         // 'details' is provided when fetchDetails = true
         console.log({data, details});
         if (
@@ -42,6 +60,18 @@ const GooglePlacesInput: FC<IProps> = ({
             .catch((error: any) => console.warn(error));
         } else {
           setCurrentAddress(data.description);
+
+          // Set new recent searches
+          const MAX_SEARCHES = 10;
+          const newSearch: PlaceSearch = {description: data.description};
+
+          const newRecentSearches = [newSearch, ...recentSearches].slice(
+            0,
+            MAX_SEARCHES,
+          );
+
+          setRecentSearches(newRecentSearches);
+          await setAsyncStorage('recent-searches', newRecentSearches);
         }
         onClose();
       }}
@@ -99,6 +129,8 @@ const GooglePlacesInput: FC<IProps> = ({
       //   // <Image source={require('path/custom/left-icon')} />
       //   <Text>SomeFakeIcon</Text>
       // )}
+
+      predefinedPlaces={recentSearches}
       renderRightButton={() => (
         <TouchableOpacity style={styles.rightButton} onPress={onClose}>
           <Text style={styles.rightButtonText}>Cancel</Text>
