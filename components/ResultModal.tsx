@@ -23,7 +23,7 @@ const ResultModal: FC<IProps> = ({
   currentAddress,
 }: IProps) => {
   const {data, errorMsg} = result;
-  const resultTitle = `Here are the subways closest to ${currentAddress} 🚂🤩`;
+  const resultTitle = `Here are the closest subways to ${currentAddress} 🚂🤩`;
 
   const renderErrorMsg = () => (
     <View style={styles.errorContainer}>
@@ -53,9 +53,7 @@ const ResultModal: FC<IProps> = ({
             }>
             <Text
               style={{...styles.result, ...isFirstStyle, ...isLastStyle}}
-              key={s.name}>{`${trim(s.name, 15).formattedStr}: ${
-              s.distanceTextRepr
-            }`}</Text>
+              key={s.name}>{`${s.name}: ${s.distanceTextRepr}`}</Text>
           </TouchableOpacity>
         );
       })}
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
   },
   result: {
     fontSize: 16,
-    paddingTop: 7.5,
+    paddingTop: 10,
   },
 });
 

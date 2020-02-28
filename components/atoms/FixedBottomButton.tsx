@@ -16,7 +16,7 @@ const FixedBottomButton = ({onPress, text}: IProps) => (
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
+    height: 75,
     width: '100%',
     backgroundColor: secondColor,
     alignItems: 'center',
