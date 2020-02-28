@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, {FC} from 'react';
-import {StyleSheet, View, TouchableOpacity, Linking} from 'react-native';
-import {thirdColor} from '../utils/variables';
+import {StyleSheet, View, Linking} from 'react-native';
+import {firstColor, grey, thirdColor} from '../utils/variables';
 import Modal from './atoms/Modal';
 import Text from './atoms/Text';
 import {Result} from '../custom-types';
 import LargeText from './atoms/LargeText';
-import {trim} from '../utils/functions';
+import SkeumorphicView from './views/SkeumorphicView';
 
 interface IProps {
   visible: boolean;
@@ -23,7 +23,6 @@ const ResultModal: FC<IProps> = ({
   currentAddress,
 }: IProps) => {
   const {data, errorMsg} = result;
-  const resultTitle = `Here are the closest subways to ${currentAddress} 🚂🤩`;
 
   const renderErrorMsg = () => (
     <View style={styles.errorContainer}>
@@ -33,7 +32,10 @@ const ResultModal: FC<IProps> = ({
 
   const renderResult = () => (
     <View style={styles.resultContainer}>
-      <LargeText style={styles.resultTitle}>{resultTitle}</LargeText>
+      <LargeText style={styles.resultTitleAddress}>
+        Here are the closest subways to
+      </LargeText>
+      <LargeText style={styles.resultTitle}>{`${currentAddress} 🚂`}</LargeText>
       {data.map((s: any, i: number) => {
         const isFirst = i === 0;
         const isLast = i === data.length - 1;
@@ -43,18 +45,23 @@ const ResultModal: FC<IProps> = ({
         const gMapsNameUri = s.name.replace(' ', '+');
 
         return (
-          <TouchableOpacity
+          <SkeumorphicView
             key={i}
-            activeOpacity={1}
             onPress={() =>
               Linking.openURL(
                 `https://www.google.com/maps/search/?api=1&query=${gMapsNameUri}`,
               )
-            }>
+            }
+            style={{...styles.resultButton, ...isLastStyle}}
+            elementType="button">
+            <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>
+              {s.name}
+            </Text>
             <Text
-              style={{...styles.result, ...isFirstStyle, ...isLastStyle}}
-              key={s.name}>{`${s.name}: ${s.distanceTextRepr}`}</Text>
-          </TouchableOpacity>
+              style={
+                styles.distanceText
+              }>{`Distance: ${s.distanceTextRepr}`}</Text>
+          </SkeumorphicView>
         );
       })}
     </View>
@@ -89,11 +96,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   resultTitle: {
-    marginBottom: 20,
+    marginBottom: 50,
+  },
+  resultTitleAddress: {
+    fontFamily: 'Muli-Regular',
+    color: grey,
+    fontSize: 16,
   },
   result: {
     fontSize: 16,
-    paddingTop: 10,
+  },
+  distanceText: {
+    fontSize: 12,
+    color: grey,
+  },
+  resultButton: {
+    width: '100%',
+    backgroundColor: firstColor,
+    marginBottom: 35,
+    padding: 15,
+    borderRadius: 10,
   },
 });
 

@@ -4,6 +4,7 @@ import {TouchableOpacity, StyleSheet, Dimensions, View} from 'react-native';
 import Text from './atoms/Text';
 import {grey, firstColor, thirdColor} from '../utils/variables';
 import {trim} from '../utils/functions';
+import SkeumorphicView from './views/SkeumorphicView';
 
 interface IProps {
   text: string;
@@ -11,19 +12,21 @@ interface IProps {
 }
 
 const SearchButton: FC<IProps> = ({text, onPress}: IProps) => (
-  <View style={styles.container}>
-    <TouchableOpacity activeOpacity={1} style={styles.button} onPress={onPress}>
-      {text === '' ? (
-        <Text style={styles.placeholder} numberOfLines={1}>
-          Place, address, location ...
-        </Text>
-      ) : (
-        <Text numberOfLines={1} style={styles.text}>
-          {trim(text).formattedStr}
-        </Text>
-      )}
-    </TouchableOpacity>
-  </View>
+  <SkeumorphicView
+    activeOpacity={1}
+    style={styles.button}
+    onPress={onPress}
+    elementType="button">
+    {text === '' ? (
+      <Text style={styles.placeholder} numberOfLines={1}>
+        Place, address, location ...
+      </Text>
+    ) : (
+      <Text numberOfLines={1} style={styles.text}>
+        {trim(text).formattedStr}
+      </Text>
+    )}
+  </SkeumorphicView>
 );
 
 const styles = StyleSheet.create({
