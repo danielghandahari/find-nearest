@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, {FC} from 'react';
-import {StyleSheet, View, Linking} from 'react-native';
+import {StyleSheet, View, Linking, Dimensions} from 'react-native';
 import {firstColor, grey, thirdColor} from '../utils/variables';
 import Modal from './atoms/Modal';
 import Text from './atoms/Text';
 import {Result} from '../custom-types';
 import LargeText from './atoms/LargeText';
 import SkeumorphicView from './views/SkeumorphicView';
+import LocationIcon from './LocationIcon';
 
 interface IProps {
   visible: boolean;
@@ -54,13 +55,16 @@ const ResultModal: FC<IProps> = ({
             }
             style={{...styles.resultButton, ...isLastStyle}}
             elementType="button">
-            <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>
-              {s.name}
-            </Text>
-            <Text
-              style={
-                styles.distanceText
-              }>{`Distance: ${s.distanceTextRepr}`}</Text>
+            <View style={styles.resultTextContainer}>
+              <Text style={{...styles.result, ...isFirstStyle}} key={s.name}>
+                {s.name}
+              </Text>
+              <Text style={styles.distanceText}>
+                {`Distance: ${s.distanceTextRepr}`}
+              </Text>
+            </View>
+
+            <LocationIcon />
           </SkeumorphicView>
         );
       })}
@@ -101,21 +105,25 @@ const styles = StyleSheet.create({
   resultTitleAddress: {
     fontFamily: 'Muli-Regular',
     color: grey,
-    fontSize: 16,
+    fontSize: 14,
   },
   result: {
     fontSize: 16,
   },
+  resultTextContainer: {},
   distanceText: {
     fontSize: 12,
     color: grey,
   },
   resultButton: {
-    width: '100%',
+    width: Dimensions.get('screen').width * 0.7,
     backgroundColor: firstColor,
     marginBottom: 35,
     padding: 15,
     borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 
