@@ -34,7 +34,7 @@ const ResultModal: FC<IProps> = ({
   const renderResult = () => (
     <View style={styles.resultContainer}>
       <LargeText style={styles.resultTitleAddress}>
-        Here are the closest subways to
+        Closest metro stations to
       </LargeText>
       <LargeText style={styles.resultTitle}>{`${currentAddress} 🚂`}</LargeText>
       {data.map((s: any, i: number) => {

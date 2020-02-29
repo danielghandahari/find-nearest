@@ -76,10 +76,12 @@ const App = () => {
           resJson = await res.json();
         } else if (res.status === 404) {
           setNoSubwaysText(
-            'There are unfortunately no subways near the given address 😢',
+            'There are unfortunately no metro stations near the given address 😢',
           );
         } else {
-          setNoSubwaysText('Failed finding subways near the given address 🧐');
+          setNoSubwaysText(
+            'Failed finding metro stations near the given address 🧐',
+          );
         }
 
         if (resJson)
@@ -93,7 +95,9 @@ const App = () => {
         setResultModalOpen(true);
       })
       .catch((error: any) => {
-        setNoSubwaysText('Failed finding subways near the given address 🧐');
+        setNoSubwaysText(
+          'Failed finding metro stations near the given address 🧐',
+        );
         console.error('Error: ', error);
         setIsLoading(false);
       });
@@ -108,7 +112,7 @@ const App = () => {
         </View>
         <View>
           <LargeText style={styles.findSubwaysText}>
-            Find nearest subways from
+            Find closest metro stations from
           </LargeText>
           <SearchButton
             text={currentAddress}
